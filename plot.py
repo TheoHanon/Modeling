@@ -14,21 +14,21 @@ def create_smooth_colormap():
     cdict = {
         'red':   [(0.0, sandybrown[0], sandybrown[0]),
                     (0.05, sandybrown[0], sandybrown[0]),
-                  (0.06, gold[0], gold[0]),
-                  (0.7, gold[0], gold[0]),
-                  (0.71, forestgreen[0], forestgreen[0]),
+                  (0.09, gold[0], gold[0]),
+                  (0.65, gold[0], gold[0]),
+                  (0.75, forestgreen[0], forestgreen[0]),
                   (1.0, forestgreen[0], forestgreen[0])],  # Ensure it ends with x=1
         'green': [(0.0, sandybrown[1], sandybrown[1]),
                     (0.05, sandybrown[1], sandybrown[1]),
-                  (0.06, gold[1], gold[1]),
-                  (0.7, gold[1], gold[1]),
-                  (0.71, forestgreen[1], forestgreen[1]),
+                  (0.09, gold[1], gold[1]),
+                  (0.65, gold[1], gold[1]),
+                  (0.75, forestgreen[1], forestgreen[1]),
                   (1.0, forestgreen[1], forestgreen[1])],  # Ensure it ends with x=1
         'blue':  [(0.0, sandybrown[2], sandybrown[2]),
                 (0.05, sandybrown[2], sandybrown[2]),
-                  (0.06, gold[2], gold[2]),
-                  (0.7, gold[2], gold[2]),
-                  (0.71, forestgreen[2], forestgreen[2]),
+                  (0.09, gold[2], gold[2]),
+                  (0.65, gold[2], gold[2]),
+                  (0.75, forestgreen[2], forestgreen[2]),
                   (1.0, forestgreen[2], forestgreen[2])]   # Ensure it ends with x=1
     }
     
