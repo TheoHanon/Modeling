@@ -1,38 +1,8 @@
 from model import *
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-from matplotlib.colors import LinearSegmentedColormap
 
 
-def create_smooth_colormap():
-    # Define colors as (R, G, B)
-    sandybrown = (244/255, 164/255, 96/255)
-    gold = (255/255, 215/255, 0/255)
-    forestgreen = (34/255, 139/255, 34/255)
-
-    # Create a colormap with smooth transitions
-    cdict = {
-        'red':   [(0.0, sandybrown[0], sandybrown[0]),
-                    (0.05, sandybrown[0], sandybrown[0]),
-                  (0.09, gold[0], gold[0]),
-                  (0.65, gold[0], gold[0]),
-                  (0.75, forestgreen[0], forestgreen[0]),
-                  (1.0, forestgreen[0], forestgreen[0])],  # Ensure it ends with x=1
-        'green': [(0.0, sandybrown[1], sandybrown[1]),
-                    (0.05, sandybrown[1], sandybrown[1]),
-                  (0.09, gold[1], gold[1]),
-                  (0.65, gold[1], gold[1]),
-                  (0.75, forestgreen[1], forestgreen[1]),
-                  (1.0, forestgreen[1], forestgreen[1])],  # Ensure it ends with x=1
-        'blue':  [(0.0, sandybrown[2], sandybrown[2]),
-                (0.05, sandybrown[2], sandybrown[2]),
-                  (0.09, gold[2], gold[2]),
-                  (0.65, gold[2], gold[2]),
-                  (0.75, forestgreen[2], forestgreen[2]),
-                  (1.0, forestgreen[2], forestgreen[2])]   # Ensure it ends with x=1
-    }
-    
-    return LinearSegmentedColormap('CustomMap', cdict)
 
 def apply_custom_colormap(T_results, colormap):
     # Normalize T_results to be in the range 0-1
@@ -46,7 +16,6 @@ def plot_q11(T_arr, t_span):
     T0 = np.array([0.05, 0.25, 0.50, 0.75, 1])  # Define the initial T values
 
     # Create a custom colormap
-    custom_colormap = create_smooth_colormap()
 
     for i, T_init in enumerate(T0):
         T_results = T_arr[:, i, :]  # Get the results for the current T_init
@@ -55,10 +24,11 @@ def plot_q11(T_arr, t_span):
         extent = [t_span[0], t_span[1], R_arr.min(), R_arr.max()]
         
         # Plot the heatmap using imshow with the smooth custom colormap
-        im = plt.imshow(T_results.T, extent=extent, origin='lower', aspect='auto', cmap=custom_colormap, vmax=1, vmin=0)
+        im = plt.imshow(T_results.T, extent=extent, origin='lower', aspect='auto', cmap="viridis", vmax=1, vmin=0)
         
         # Add colorbar for reference
         cbar = plt.colorbar(im)
+        cbar.set_label('T', rotation=270, labelpad=15)
 
         legend_elements = [
             Line2D([0], [0], marker='o', color='w', label='Arid (T < 0.05)', markersize=15, markerfacecolor='sandybrown', linestyle='None'),
@@ -73,7 +43,6 @@ def plot_q11(T_arr, t_span):
         
         # Show the plot
         plt.show()
-# Rest of the code remains unchanged...
 
 
 
@@ -121,6 +90,23 @@ def plot_q12(T_arr, R_arr):
     plt.show()
 
     return 
+
+def plot_q12_add():
+
+    r = lambda x: r_m * x / (h_R + x)
+
+    R_arr = np.linspace(0, 5, 6)  
+    T_array=np.linspace(0,1,100)
+    for i, R in enumerate(R_arr):
+        plt.plot(T_array,r(R) * T_array * (1 - T_array/k) - m_n * T_array * h_n / (T_array + h_n)  - m_f * T_array * (h_f**p) / (T_array**p + h_f**p),label="R="+str(R))
+    plt.axhline(y=0, color='m',linestyle='--')
+    plt.xlabel("T")
+    plt.ylabel("dT/dt")
+    plt.legend()
+    plt.show()
+
+    return 
+
 
 
 
@@ -171,6 +157,7 @@ if __name__ == "__main__":
 
     plot_q11(T_arr,t_span)
     plot_q12(T_arr, R_arr)
+    plot_q12_add()
 
     T_arr = run_model2()
 
