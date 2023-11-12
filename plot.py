@@ -89,10 +89,14 @@ def plot_q12_add():
     # Plot dT/dt for each rainfall rate
     for i, R in enumerate(R_arr):
         plt.plot(T_array, r(R) * T_array * (1 - T_array/k) - m_n * T_array * h_n / (T_array + h_n) - m_f * T_array * (h_f**p) / (T_array**p + h_f**p), label=f"R={R}")
-    plt.axhline(y=0, color='m', linestyle='--')
+    
+    plt.axhline(y=0, color='black', linestyle='--')
+    plt.plot([.56], [0], ".", markersize = 15, color = "red", label = "Unstable\nfixed point")   
     plt.xlabel("Tree Cover (T)")
     plt.ylabel("Rate of Change of Tree Cover (dT/dt)")
-    plt.legend()
+    plt.xticks(np.arange(min(T_array), max(T_array)+0.1, 0.1))
+    plt.grid(True)
+    plt.legend(shadow = True)
     plt.show()
 
 def plot_q2_3D(T_arr):
@@ -138,12 +142,12 @@ if __name__ == "__main__":
     T_arr, R_arr, t_span = run_model1()
     
     # Call the plotting functions with the results
-    plot_q11(T_arr, t_span)
-    plot_q12(T_arr, R_arr)
+    # plot_q11(T_arr, t_span)
+    # plot_q12(T_arr, R_arr)
     plot_q12_add()
     
     # Run the second model
-    T_arr = run_model2()
+    # T_arr = run_model2()
     
     # Plot the results in 3D
-    plot_q2_3D(T_arr)
+    # plot_q2_3D(T_arr)
