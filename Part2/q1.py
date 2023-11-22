@@ -29,7 +29,7 @@ dTdt = r(R) * T * (1 - T/k) - m_n * T * h_n/ (h_n + T) - m_f * T * h_f**p / (T**
 
 F = lambda x: sy.Poly(sy.expand(r(x) * z*(1 - z/k)*(z+h_n) *(z**p + h_f**p) - m_n*z*h_n*(z**p + h_f**p) - m_f*z*(z + h_n)*h_f**p))
 
-a = lambda x: F(x).all_coeffs()
+# a = lambda x: F(x).all_coeffs()
 
 
 
@@ -38,7 +38,7 @@ J = lambda T, R: r(R)*(1 - 2*T/k) - m_n*h_n**2/(T + h_n)**2 - m_f*h_f**p * (T**p
 
 
 
-# a = lambda x: [-r(x)/k, r(x), r(x)*h_n*(1-1/k)-m_n*h_n, 0, 0, 0, 0, -r(x)*h_f**p / k, r(x)*h_f**p -m_f*h_f**p, -(r(x)*h_n*h_f**p *(1/k - 1) + m_n*h_n*h_f**p+m_f*h_f**p*h_n),0]
+a = lambda x: [-r(x)/k, r(x)*(1-h_n/k), h_n*r(x)-m_n*h_n, 0, 0, 0, 0, -r(x)*h_f**p / k, h_f**p *(r(x) - h_n / k *r(x) - m_f), (r(x)*h_n*h_f**p - m_n*h_n*h_f**p-m_f*h_f**p*h_n),0]
 
 R_init = np.linspace(0, 5, 200)
 
