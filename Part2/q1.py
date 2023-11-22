@@ -25,7 +25,7 @@ r = lambda x: r_m * x / (h_R + x)
 
 dTdt = r(R) * T * (1 - T/k) - m_n * T * h_n/ (h_n + T) - m_f * T * h_f**p / (T**p + h_f**p)
 
-J = lambda t, x : sy.diff(dTdt, T).subs(R, x).subs(T, t)
+# J = lambda t, x : sy.diff(dTdt, T).subs(R, x).subs(T, t)
 
 F = lambda x: sy.Poly(sy.expand(r(x) * z*(1 - z/k)*(z+h_n) *(z**p + h_f**p) - m_n*z*h_n*(z**p + h_f**p) - m_f*z*(z + h_n)*h_f**p))
 
@@ -33,7 +33,7 @@ a = lambda x: F(x).all_coeffs()
 
 
 
-# J = lambda T, R: r(R)*(1 - 2*T/k) - m_n*h_n/(T + h_n)**2 - m_f*h_f**p * (T**p - p*T**(p-1) + h_f**p) / (T**p + h_f**p)**2
+J = lambda T, R: r(R)*(1 - 2*T/k) - m_n*h_n**2/(T + h_n)**2 - m_f*h_f**p * (T**p - p*T**p + h_f**p) / (T**p + h_f**p)**2
 
 
 
