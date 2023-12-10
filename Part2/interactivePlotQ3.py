@@ -43,7 +43,7 @@ t = np.linspace(0, 200, 201)
 
 def computeVariables(t,alpha1,alpha2,K,r_H, pi1,lam,lamb0,R_const):
     T = [0.1]
-    H = [25]
+    H = [.3]
     P = [0]
     for j in range(1, len(t)):
         next_T = T[j-1] + dTdt(T[j-1], H[j-1], P[-1],alpha1,alpha2,K,r_H, pi1,lam,lamb0,R_const)
@@ -53,18 +53,18 @@ def computeVariables(t,alpha1,alpha2,K,r_H, pi1,lam,lamb0,R_const):
         H.append(next_H)
         P.append(next_P)
     T=100*(np.array(T))
-    H=np.array(H)
+    H=np.array(H)*100
     P=100*(np.array(P))
     return T, H, P
 
 
 ### New parameters
-init_alpha1= 0.3 / 200
+init_alpha1= 0.3 
 init_r_H = .01  # Human growth rate [1/year]
-init_K = 200  # Carrying capacity of humans 
+init_K = .8  # Carrying capacity of humans 
 init_pi1 = .05
 init_alpha2 = 0.1
-init_lam = .01/200
+init_lam = .01
 init_lam0 = .01
 init_R_const = 2
 
@@ -77,15 +77,15 @@ ax.legend()
 fig.suptitle("Dynamics of the deforestation caused by human population pressure",fontsize=15)
 fig.subplots_adjust(left=0.25, bottom=0.25)
 
-# ax.set_ylim(0, 100)  
+ax.set_ylim(0, 100)  
 
 axAlpha1 = fig.add_axes([0.1, 0.1, 0.15, 0.03])
 alpha1_slider = Slider(
     ax=axAlpha1,
     label=' $\\alpha_1$',
     valmin=0,
-    valmax=.1,
-    valinit=0.3/200,
+    valmax=1,
+    valinit=0.3,
 )
 axAlpha2 = fig.add_axes([0.3, 0.1, 0.15, 0.03])
 alpha2_slider = Slider(
@@ -100,8 +100,8 @@ K_slider = Slider(
     ax=axK,
     label=' $K$',
     valmin=0,
-    valmax=200,
-    valinit=200,
+    valmax=1,
+    valinit=.8,
 )
 axRh = fig.add_axes([0.7, 0.1, 0.15, 0.03])
 Rh_slider = Slider(
@@ -124,15 +124,15 @@ lambd_slider = Slider(
     ax=axlambd,
     label=' $\\lambda$',
     valmin=0,
-    valmax=.1,
-    valinit=0.1 / 200,
+    valmax=1,
+    valinit=0.1,
 )
 axlambd0 = fig.add_axes([0.5, 0.05, 0.15, 0.03])
 lambd0_slider = Slider(
     ax=axlambd0,
     label=' $\\lambda_0$',
     valmin=0,
-    valmax=.1,
+    valmax=1,
     valinit=.01,
 )
 axR = fig.add_axes([0.7, 0.05, 0.15, 0.03])

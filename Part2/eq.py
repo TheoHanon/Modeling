@@ -74,6 +74,43 @@ forest2100_wc = [forest2100_america_wc, forest2100_africa_wc, forest2100_aus_wc]
 forest2100_bc = [forest2100_america_bc, forest2100_africa_bc, forest2100_aus_bc]
 
 
+
+def plot_rainfall(rainfall1999, rainfall2100):
+        fig = plt.figure(figsize=(10, 10))
+
+
+        ax1 = fig.add_subplot(211, projection=ccrs.PlateCarree())
+
+        ax1.set_extent([min(lons), max(lons), min(lats), max(lats)], crs=ccrs.PlateCarree())
+        ax1.add_feature(cfeature.OCEAN, alpha = .7)
+        cs1 = ax1.contourf(lons, lats, rainfall1999, cmap='Blues', vmax = 7000, levels=np.linspace(0, 7000, 7))#, vmin=0, vmax=80, levels=np.linspace(0, 80, 80))
+        ax1.set_title('Rainfall in 1999', fontsize = 14)
+        ax1.coastlines(resolution='110m', color='black', linewidth=1)
+        ax1.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
+        # cbar = plt.colorbar(cs1, ax=ax1, orientation='horizontal', pad = 0.1,boundaries = np.linspace(0, 5000, 100))
+        # cbar.set_label('Rainfall (mm/year))')
+
+        ax2 = fig.add_subplot(212, projection=ccrs.PlateCarree())
+        
+        ax2.set_extent([min(lons), max(lons), min(lats), max(lats)], crs=ccrs.PlateCarree())
+        ax2.add_feature(cfeature.OCEAN, alpha = .7)
+        cs2 = ax2.contourf(lons, lats, rainfall2100, cmap='Blues', vmax = 7000,levels=np.linspace(0, 7000, 7))#, vmin=0, vmax=80, levels=np.linspace(0, 80, 80))
+        ax2.set_title('Rainfall in 2100', fontsize = 14)
+        ax2.coastlines(resolution='110m', color='black', linewidth=1)
+        ax2.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
+        cbar = plt.colorbar(cs1, ax=ax2, orientation='horizontal', pad = 0.1, boundaries = np.linspace(0, 7000, 7), aspect = 40)
+        cbar.set_label('Rainfall (mm/year)')
+        cbar_ticks = np.arange(0, 8000, 1000)  # Creates a list from 0 to 80 in steps of 10
+        cbar.set_ticks(cbar_ticks)
+
+        plt.show()
+
+
+
+
+
+
+
 def plot_forest_cover(forest_wc,forest_bc):
 
     fig = plt.figure(figsize=(10, 10))
@@ -123,6 +160,8 @@ def plot_forest_cover(forest_wc,forest_bc):
     plt.savefig("PredictedTreeCover.pdf")
     plt.show()
     return 
+
+plot_rainfall(rainfall1999,rainfall2100)
 plot_forest_cover(forest2100_wc,forest2100_bc)
 
 
