@@ -57,7 +57,7 @@ def new_model(T0, R0, H0, P0):
         return r_H * y3*(1 - y3/K) + pi1 * alpha1* y1*y3
 
     def dPdt(t, y1, y2, y3, y4):
-        return lam*y3 - lam0*y4
+        return lam*(y3-y4) - lam0*y4
 
     # System of differential equations for tree cover and rainfall
     def dzdt(t, y):
@@ -116,8 +116,8 @@ human_density[~(np.isnan(forest1999))] = (100 - forest1999[~(np.isnan(forest1999
 human_density[(np.isnan(forest1999)) ^ (np.isnan(rainfall1999))] = 50
 
 
-tree_cover_pred = np.full((len(lats), len(lons), 600), np.nan)
-human_density_pred = np.full((len(lats), len(lons), 600), np.nan)
+tree_cover_pred = np.full((len(lats), len(lons), 200), np.nan)
+human_density_pred = np.full((len(lats), len(lons), 200), np.nan)
 for i in range(row):
     for j in range(col):
         if(lons_sa[0]<=lons[j]<=lons_sa[1]):
@@ -169,23 +169,23 @@ fig = plt.figure(figsize=(10, 10))
 ax1 = fig.add_subplot(111, projection=ccrs.PlateCarree())
 ax1.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
 ax1.add_feature(cfeature.OCEAN, alpha=0.7)
-contour = ax1.contourf(lons, lats, human_density_pred[:, :, 0], cmap='OrRd', vmin=0, vmax=.8,levels=np.linspace(0,.8, 80))
+contour = ax1.contourf(lons, lats, tree_cover_pred[:, :, 0], cmap='OrRd', vmin=0, vmax=1,levels=np.linspace(0,1, 100))
 ax1.set_title('Forest Cover in 1999', fontsize=14)
 ax1.coastlines(resolution='110m', color='black', linewidth=1)
 ax1.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
 
 # Update function for the animation
-def update_plot(frame_number, human_density_pred, ax):
+def update_plot(frame_number, tree_cover_pred, ax):
     # ax.clear()
     ax.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
     ax.add_feature(cfeature.OCEAN, alpha=0.7)
     ax.coastlines(resolution='110m', color='black', linewidth=1)
     ax.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
     ax.set_title(f'Forest Cover in {1999 + frame_number}', fontsize=14)  # Update the year dynamically
-    contour = ax.contourf(lons, lats, human_density_pred[:, :, frame_number], cmap='OrRd', vmin=0, vmax=.8,levels=np.linspace(0,.8, 80))
+    contour = ax.contourf(lons, lats, tree_cover_pred[:, :, frame_number], cmap='OrRd', vmin=0, vmax=.8,levels=np.linspace(0,1, 100))
     return contour,
 
-ani = animation.FuncAnimation(fig, update_plot, frames=600,interval=20, fargs=(human_density_pred, ax1))
+ani = animation.FuncAnimation(fig, update_plot, frames=200,interval=20, fargs=(tree_cover_pred, ax1))
 # plt.show()
 # Create the animation
 # ani = animation.FuncAnimation(fig, update_plot, frames=100, fargs=(tree_cover_pred, ax1, fig))

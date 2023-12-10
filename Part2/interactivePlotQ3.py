@@ -37,7 +37,7 @@ def dHdt(y1, y3, y4, alpha1,alpha2,K,r_H, pi1,lam,lam0,R_const):
     return r_H * y3*(1 - y3/K) + pi1 * alpha1* y1*y3
 
 def dPdt(y1, y3, y4, alpha1,alpha2,K,r_H, pi1,lam,lam0,R_const):
-    return lam*y3 - lam0*y4
+    return lam*(y3-y4) - lam0*y4
 
 t = np.linspace(0, 200, 201)
 
