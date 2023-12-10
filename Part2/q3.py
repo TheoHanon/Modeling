@@ -22,13 +22,13 @@ r_R = 1      # Rainfall regeneration rate [1/year]
 
 ### New parameters
 r_H = .01 #Human growth rate [1/year]
-K = .8 #Carrying capacity of humans 
-pi1 = .1
-alpha1 = .1 # Max cutting tree cover / year 
+K = 200 # Carrying capacity of humans 
+pi1 = .05  
+alpha1 = .1 / 200 # Max cutting tree cover / year 
 
 alpha2 = 0.01
-lam = .01
-lam0 = .1
+lam = .1 / 200
+lam0 = .05
 
 def new_model(T0, R0, H0, P0):
     """
@@ -57,7 +57,7 @@ def new_model(T0, R0, H0, P0):
         return r_H * y3*(1 - y3/K) + pi1 * alpha1* y1*y3
 
     def dPdt(t, y1, y2, y3, y4):
-        return lam*(y3-y4) - lam0*y4
+        return lam*y3*(1-y4) - lam0*y4
 
     # System of differential equations for tree cover and rainfall
     def dzdt(t, y):
@@ -65,7 +65,7 @@ def new_model(T0, R0, H0, P0):
 
     # Array of initial rainfall levels for simulation
 
-    nYear = 600
+    nYear = 200
     # Time span for the simulation
     t_span = (0, nYear)
     # Time points at which to solve the system
@@ -112,8 +112,8 @@ lons_sa = [-90, -30]
 
 human_density = np.full((len(lats), len(lons)), np.nan)
 
-human_density[~(np.isnan(forest1999))] = (100 - forest1999[~(np.isnan(forest1999))])*.4
-human_density[(np.isnan(forest1999)) ^ (np.isnan(rainfall1999))] = 50
+human_density[~(np.isnan(forest1999))] = (100 - forest1999[~(np.isnan(forest1999))])/100 * 10
+human_density[(np.isnan(forest1999)) ^ (np.isnan(rainfall1999))] = 30
 
 
 tree_cover_pred = np.full((len(lats), len(lons), 200), np.nan)
@@ -122,7 +122,7 @@ for i in range(row):
     for j in range(col):
         if(lons_sa[0]<=lons[j]<=lons_sa[1]):
             if (np.isnan(human_density[i, j])): continue
-            H0 = human_density[i, j]*.01 
+            H0 = human_density[i, j] 
             T0 = forest1999[i, j]*.01 if ~np.isnan(forest1999[i, j]) else 0.0
             R0 = rainfall2100[i, j]*0.001 if ~np.isnan(rainfall2100[i, j]) else 0.0
             P0 = 0
@@ -169,24 +169,24 @@ fig = plt.figure(figsize=(10, 10))
 ax1 = fig.add_subplot(111, projection=ccrs.PlateCarree())
 ax1.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
 ax1.add_feature(cfeature.OCEAN, alpha=0.7)
-contour = ax1.contourf(lons, lats, tree_cover_pred[:, :, 0], cmap='OrRd', vmin=0, vmax=1,levels=np.linspace(0,1, 100))
-ax1.set_title('Forest Cover in 1999', fontsize=14)
+contour = ax1.contourf(lons, lats, tree_cover_pred[:,:, -1], cmap='YlOrRd', vmin=0, vmax=30)#,levels=np.linspace(0,30, 100))
+ax1.set_title('Approximation of Human Density in 1999', fontsize=14)
 ax1.coastlines(resolution='110m', color='black', linewidth=1)
 ax1.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
-
+plt.show()
 # Update function for the animation
-def update_plot(frame_number, tree_cover_pred, ax):
-    # ax.clear()
-    ax.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
-    ax.add_feature(cfeature.OCEAN, alpha=0.7)
-    ax.coastlines(resolution='110m', color='black', linewidth=1)
-    ax.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
-    ax.set_title(f'Forest Cover in {1999 + frame_number}', fontsize=14)  # Update the year dynamically
-    contour = ax.contourf(lons, lats, tree_cover_pred[:, :, frame_number], cmap='OrRd', vmin=0, vmax=.8,levels=np.linspace(0,1, 100))
-    return contour,
+# def update_plot(frame_number, tree_cover_pred, ax):
+#     # ax.clear()
+#     ax.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
+#     ax.add_feature(cfeature.OCEAN, alpha=0.7)
+#     ax.coastlines(resolution='110m', color='black', linewidth=1)
+#     ax.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
+#     ax.set_title(f'Forest Cover in {1999 + frame_number}', fontsize=14)  # Update the year dynamically
+#     contour = ax.contourf(lons, lats, tree_cover_pred[:, :, frame_number], cmap='OrRd', vmin=0, vmax=.8,levels=np.linspace(0,1, 100))
+#     return contour,
 
-ani = animation.FuncAnimation(fig, update_plot, frames=200,interval=20, fargs=(tree_cover_pred, ax1))
-# plt.show()
-# Create the animation
-# ani = animation.FuncAnimation(fig, update_plot, frames=100, fargs=(tree_cover_pred, ax1, fig))
-ani.save('test2.mp4', fps=30)
+# ani = animation.FuncAnimation(fig, update_plot, frames=200,interval=20, fargs=(tree_cover_pred, ax1))
+# # plt.show()
+# # Create the animation
+# # ani = animation.FuncAnimation(fig, update_plot, frames=100, fargs=(tree_cover_pred, ax1, fig))
+# ani.save('test2.mp4', fps=30)

@@ -37,13 +37,13 @@ def dHdt(y1, y3, y4, alpha1,alpha2,K,r_H, pi1,lam,lam0,R_const):
     return r_H * y3*(1 - y3/K) + pi1 * alpha1* y1*y3
 
 def dPdt(y1, y3, y4, alpha1,alpha2,K,r_H, pi1,lam,lam0,R_const):
-    return lam*(y3-y4) - lam0*y4
+    return lam*y3*(1-y4) - lam0*y4
 
 t = np.linspace(0, 200, 201)
 
 def computeVariables(t,alpha1,alpha2,K,r_H, pi1,lam,lamb0,R_const):
     T = [0.1]
-    H = [0.5]
+    H = [25]
     P = [0]
     for j in range(1, len(t)):
         next_T = T[j-1] + dTdt(T[j-1], H[j-1], P[-1],alpha1,alpha2,K,r_H, pi1,lam,lamb0,R_const)
@@ -53,19 +53,19 @@ def computeVariables(t,alpha1,alpha2,K,r_H, pi1,lam,lamb0,R_const):
         H.append(next_H)
         P.append(next_P)
     T=100*(np.array(T))
-    H=100*(np.array(H))
+    H=np.array(H)
     P=100*(np.array(P))
     return T, H, P
 
 
 ### New parameters
-init_alpha1= 0.1
+init_alpha1= 0.3 / 200
 init_r_H = .01  # Human growth rate [1/year]
-init_K = .8  # Carrying capacity of humans 
-init_pi1 = .1
-init_alpha2 = 0.01
-init_lam = .01
-init_lam0 = .1
+init_K = 200  # Carrying capacity of humans 
+init_pi1 = .05
+init_alpha2 = 0.1
+init_lam = .01/200
+init_lam0 = .01
 init_R_const = 2
 
 fig, ax = plt.subplots(figsize=(12, 7))
@@ -77,15 +77,15 @@ ax.legend()
 fig.suptitle("Dynamics of the deforestation caused by human population pressure",fontsize=15)
 fig.subplots_adjust(left=0.25, bottom=0.25)
 
-ax.set_ylim(0, 100)  
+# ax.set_ylim(0, 100)  
 
 axAlpha1 = fig.add_axes([0.1, 0.1, 0.15, 0.03])
 alpha1_slider = Slider(
     ax=axAlpha1,
     label=' $\\alpha_1$',
     valmin=0,
-    valmax=1,
-    valinit=0.1,
+    valmax=.1,
+    valinit=0.3/200,
 )
 axAlpha2 = fig.add_axes([0.3, 0.1, 0.15, 0.03])
 alpha2_slider = Slider(
@@ -93,15 +93,15 @@ alpha2_slider = Slider(
     label=' $\\alpha_2$',
     valmin=0,
     valmax=1,
-    valinit=0.01,
+    valinit=0.1,
 )
 axK = fig.add_axes([0.5, 0.1, 0.15, 0.03])
 K_slider = Slider(
     ax=axK,
     label=' $K$',
     valmin=0,
-    valmax=1,
-    valinit=0.8,
+    valmax=200,
+    valinit=200,
 )
 axRh = fig.add_axes([0.7, 0.1, 0.15, 0.03])
 Rh_slider = Slider(
@@ -116,24 +116,24 @@ pi1_slider = Slider(
     ax=axpi1,
     label=' $\\pi_1$',
     valmin=0,
-    valmax=1,
-    valinit=0.1,
+    valmax=.2,
+    valinit=0.05,
 )
 axlambd = fig.add_axes([0.3, 0.05, 0.15, 0.03])
 lambd_slider = Slider(
     ax=axlambd,
     label=' $\\lambda$',
     valmin=0,
-    valmax=1,
-    valinit=0.1,
+    valmax=.1,
+    valinit=0.1 / 200,
 )
 axlambd0 = fig.add_axes([0.5, 0.05, 0.15, 0.03])
 lambd0_slider = Slider(
     ax=axlambd0,
     label=' $\\lambda_0$',
     valmin=0,
-    valmax=1,
-    valinit=0.01,
+    valmax=.1,
+    valinit=.01,
 )
 axR = fig.add_axes([0.7, 0.05, 0.15, 0.03])
 R_slider = Slider(
