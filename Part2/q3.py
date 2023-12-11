@@ -8,6 +8,8 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 
 
+
+
 R = 2         # Amount of rainfall [mm/day]
 r_m = 0.3    # Maximum growth rate of tree cover [1/year]
 h_R = 0.5     # Half-saturation constant for rainfall effect on growth [mm/day]
@@ -139,7 +141,7 @@ def plot_map(tree_cover_pred, human_density_pred, lats, lons):
     ax2.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
     ax2.add_feature(cfeature.OCEAN, alpha=0.7)
     contour2 = ax2.contourf(lons, lats, human_density_pred[:,:, -1], cmap='Reds', vmin=0, vmax=1)
-    ax2.set_title('Predicted Human Density in 2100', fontsize=14)
+    ax2.set_title('Predicted Human Density in 2200', fontsize=14)
     ax2.coastlines(resolution='110m', color='black', linewidth=1)
     ax2.gridlines(draw_labels=False, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
     plt.colorbar(contour2, ax=ax2, orientation='horizontal',pad=0.1, boundaries=np.linspace(0, 1, 5))
@@ -153,7 +155,7 @@ def plot_map(tree_cover_pred, human_density_pred, lats, lons):
 plot_map(tree_cover_pred, human_density_pred, lats, lons)
 
 fig = plt.figure(figsize=(7, 4))
-plt.suptitle("Simulation of Tree Cover & Human Density from 1999 to 2100", fontsize=14)
+plt.suptitle("Simulation of Tree Cover & Human Density from 1999 to 2150", fontsize=14)
 ax1 = fig.add_subplot(121, projection=ccrs.PlateCarree())
 ax1.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
 ax1.add_feature(cfeature.OCEAN, alpha=0.7)
@@ -176,26 +178,26 @@ plt.colorbar(contour2, ax=ax2, orientation='horizontal',pad=0.1,boundaries=np.li
 # # Update function for the animation
 def update_plot(frame_number, tree_cover_pred, human_density_pred, ax1, ax2):
     # ax.clear()
-    ax1.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
-    ax1.add_feature(cfeature.OCEAN, alpha=0.7)
-    ax1.coastlines(resolution='110m', color='black', linewidth=1)
-    ax1.gridlines(draw_labels=False, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
+    # ax1.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
+    # ax1.add_feature(cfeature.OCEAN, alpha=0.7)
+    # ax1.coastlines(resolution='110m', color='black', linewidth=1)
+    # ax1.gridlines(draw_labels=False, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
     ax1.set_title(f'Forest Cover in {1999 + frame_number}', fontsize=14)  # Update the year dynamically
-    contour1 = ax1.contourf(lons, lats, tree_cover_pred[:, :, frame_number], cmap='Greens', vmin=0, vmax=1,levels=np.linspace(0,1, 10))
+    contour1 = ax1.contourf(lons, lats, tree_cover_pred[:, :, frame_number], cmap='Greens', vmin=0, vmax=1,levels=np.linspace(0,1, 5))
     # plt.colorbar(contour1, ax=ax1, orientation='horizontal',pad=0.1)
 
-    ax2.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
-    ax2.add_feature(cfeature.OCEAN, alpha=0.7)
-    ax2.coastlines(resolution='110m', color='black', linewidth=1)
-    ax2.gridlines(draw_labels=False, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
+    # ax2.set_extent([-90, -30, min(lats), max(lats)], crs=ccrs.PlateCarree())
+    # ax2.add_feature(cfeature.OCEAN, alpha=0.7)
+    # ax2.coastlines(resolution='110m', color='black', linewidth=1)
+    # ax2.gridlines(draw_labels=False, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
     ax2.set_title(f'Human Density in {1999 + frame_number}', fontsize=14)  # Update the year dynamically
-    contour2 = ax2.contourf(lons, lats, human_density_pred[:, :, frame_number], cmap='Reds', vmin=0, vmax=1,levels=np.linspace(0,1, 10))
+    contour2 = ax2.contourf(lons, lats, human_density_pred[:, :, frame_number], cmap='Reds', vmin=0, vmax=1,levels=np.linspace(0,1, 5))
     # plt.colorbar(contour2, ax=ax2, orientation='horizontal',pad=0.1)
 
     return contour1, contour2,
 
-ani = animation.FuncAnimation(fig, update_plot, frames=100,interval=20, fargs=(tree_cover_pred, human_density_pred, ax1, ax2))
-plt.show()
+ani = animation.FuncAnimation(fig, update_plot, frames=152,interval=100, fargs=(tree_cover_pred, human_density_pred, ax1, ax2))
+# plt.show()
 # Create the animation
 # ani = animation.FuncAnimation(fig, update_plot, frames=100, fargs=(tree_cover_pred, ax1, fig))
-# ani.save('test2.mp4', fps=30)
+ani.save('ani.mp4', writer='ffmpeg')
