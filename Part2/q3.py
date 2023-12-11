@@ -149,33 +149,6 @@ def plot_map(tree_cover_pred, human_density_pred, lats, lons):
 
 
 
-# fig = plt.figure(figsize=(10, 10))
-# ax1 = fig.add_subplot(111, projection=ccrs.PlateCarree())
-
-# # Forest cover for 1999
-# ax1.set_extent([-90,-30, min(lats), max(lats)], crs=ccrs.PlateCarree())
-# ax1.add_feature(cfeature.OCEAN, alpha = .7)
-# cs1 = ax1.contourf(lons, lats, tree_cover_pred, cmap='Greens', vmin=0, vmax=1)
-# ax1.set_title('Forest Cover in 1999', fontsize = 14)
-# ax1.coastlines(resolution='110m', color='black', linewidth=1)
-# ax1.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
-
-# plt.show()
-
-# fig = plt.figure(figsize=(10, 10))
-# ax1 = fig.add_subplot(111, projection=ccrs.PlateCarree())
-
-# # Forest cover for 1999
-# ax1.set_extent([-90,-30, min(lats), max(lats)], crs=ccrs.PlateCarree())
-# ax1.add_feature(cfeature.OCEAN, alpha = .7)
-# cs1 = ax1.contourf(lons, lats, human_density_pred, cmap='OrRd', vmin=0, vmax=1)
-# ax1.set_title('Forest Cover in 1999', fontsize = 14)
-# ax1.coastlines(resolution='110m', color='black', linewidth=1)
-# ax1.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
-
-# plt.show()
-
-
 
 plot_map(tree_cover_pred, human_density_pred, lats, lons)
 
