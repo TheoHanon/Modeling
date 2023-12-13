@@ -1,16 +1,13 @@
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import matplotlib.gridspec as gridspec
-from matplotlib.colors import LinearSegmentedColormap
-from scipy.interpolate import UnivariateSpline
-import math 
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io
 
 
-fname = './treecovdata.nc'
-fname_mat = './2023worldforestrainfalldata.mat'
+fname = 'data/treecovdata.nc'
+fname_mat = 'data/2023worldforestrainfalldata.mat'
 mat_file = scipy.io.loadmat(fname_mat)
 
 rainfall1999 = mat_file['rainfall1999']
@@ -22,7 +19,7 @@ lons = np.squeeze(mat_file['lons'],axis=0)
 
 row,col=rainfall2100.shape
 
-fname_mat = './worldfixedpointdata.mat'
+fname_mat = 'data/worldfixedpointdata.mat'
 mat_file = scipy.io.loadmat(fname_mat)
 fixedpointdata_southamerica = mat_file['fixedpointdata_southamerica']
 fixedpointdata_africa = mat_file['fixedpointdata_africa']
@@ -63,20 +60,29 @@ def compute_forest2100(fixedpointdata, Lons, worstcase = False):
     return forest2100
 
 
-forest2100_america_wc = compute_forest2100(fixedpointdata_southamerica, lons_sa, worstcase = True)
-forest2100_america_bc = compute_forest2100(fixedpointdata_southamerica, lons_sa, worstcase = False)
-forest2100_africa_wc = compute_forest2100(fixedpointdata_africa, lons_af, worstcase = True)
-forest2100_africa_bc = compute_forest2100(fixedpointdata_africa, lons_af, worstcase = False)
-forest2100_aus_wc = compute_forest2100(fixedpointdata_aus, lons_au, worstcase = True)
-forest2100_aus_bc = compute_forest2100(fixedpointdata_aus, lons_au, worstcase = False)
+def gather_forest2100():
 
-forest2100_wc = [forest2100_america_wc, forest2100_africa_wc, forest2100_aus_wc]
-forest2100_bc = [forest2100_america_bc, forest2100_africa_bc, forest2100_aus_bc]
+    forest2100_america_wc = compute_forest2100(fixedpointdata_southamerica, lons_sa, worstcase = True)
+    forest2100_america_bc = compute_forest2100(fixedpointdata_southamerica, lons_sa, worstcase = False)
+    forest2100_africa_wc = compute_forest2100(fixedpointdata_africa, lons_af, worstcase = True)
+    forest2100_africa_bc = compute_forest2100(fixedpointdata_africa, lons_af, worstcase = False)
+    forest2100_aus_wc = compute_forest2100(fixedpointdata_aus, lons_au, worstcase = True)
+    forest2100_aus_bc = compute_forest2100(fixedpointdata_aus, lons_au, worstcase = False)
+
+    forest2100_wc = [forest2100_america_wc, forest2100_africa_wc, forest2100_aus_wc]
+    forest2100_bc = [forest2100_america_bc, forest2100_africa_bc, forest2100_aus_bc]
+
+    return forest2100_wc, forest2100_bc
 
 
 
-def plot_rainfall(rainfall1999, rainfall2100):
-        fig = plt.figure(figsize=(10, 10))
+
+
+def plot_rainfall():
+        
+        rainfall2100_wc, rainfall_2100_bc = gather_forest2100()
+
+        fig = plt.figure(figsize=(10, 6))
 
 
         ax1 = fig.add_subplot(211, projection=ccrs.PlateCarree())
@@ -87,8 +93,7 @@ def plot_rainfall(rainfall1999, rainfall2100):
         ax1.set_title('Rainfall in 1999', fontsize = 14)
         ax1.coastlines(resolution='110m', color='black', linewidth=1)
         ax1.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
-        # cbar = plt.colorbar(cs1, ax=ax1, orientation='horizontal', pad = 0.1,boundaries = np.linspace(0, 5000, 100))
-        # cbar.set_label('Rainfall (mm/year))')
+
 
         ax2 = fig.add_subplot(212, projection=ccrs.PlateCarree())
         
@@ -103,6 +108,8 @@ def plot_rainfall(rainfall1999, rainfall2100):
         cbar_ticks = np.arange(0, 8000, 1000)  # Creates a list from 0 to 80 in steps of 10
         cbar.set_ticks(cbar_ticks)
 
+        fig.subplots_adjust(top=0.95, bottom=0.05, left=0.05, right=0.95, hspace=0.01)
+
         plt.show()
 
 
@@ -111,7 +118,9 @@ def plot_rainfall(rainfall1999, rainfall2100):
 
 
 
-def plot_forest_cover(forest_wc,forest_bc):
+def plot_forest_cover():
+
+    forest_wc, forest_bc = gather_forest2100()
 
     fig = plt.figure(figsize=(10, 10))
 
@@ -157,12 +166,11 @@ def plot_forest_cover(forest_wc,forest_bc):
     cbar_ticklabels = [f'{tick}%' for tick in cbar_ticks]  # List comprehension to add '%' to each tick
     cbar.set_ticklabels(cbar_ticklabels)  # Sets the text of the ticks
     fig.subplots_adjust(top=0.95, bottom=0.1, left=0.05, right=0.95, hspace=0.2)
-    plt.savefig("PredictedTreeCover.pdf")
+    plt.savefig("plot/PredictedTreeCover.pdf")
     plt.show()
     return 
 
-plot_rainfall(rainfall1999,rainfall2100)
-plot_forest_cover(forest2100_wc,forest2100_bc)
+
 
 
 
