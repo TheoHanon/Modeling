@@ -166,7 +166,6 @@ def plot_forest_cover():
     cbar_ticklabels = [f'{tick}%' for tick in cbar_ticks]  # List comprehension to add '%' to each tick
     cbar.set_ticklabels(cbar_ticklabels)  # Sets the text of the ticks
     fig.subplots_adjust(top=0.95, bottom=0.1, left=0.05, right=0.95, hspace=0.2)
-    plt.savefig("plot/PredictedTreeCover.pdf")
     plt.show()
     return 
 
