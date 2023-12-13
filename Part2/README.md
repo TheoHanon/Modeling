@@ -25,12 +25,11 @@ Required libraries:
 
 ### Executing Program
 
-You can execute the program in your terminal using:
+You can get the plot of the report and of the animation using:
 ```
 python3 main.py
 ```
-
-If you want to run the iteractive plot of our new model (covered in the video) you can launch it with
+Caution the animation can take time  depending of your computer. If you want to run the iteractive plot of our new model (covered in the video) you can launch it with
 ```
 python3 interactivePlotQ3.py
 ```
