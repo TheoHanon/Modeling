@@ -29,7 +29,7 @@ You can get the plots of the report and of the animation using:
 ```
 python3 main.py
 ```
-Caution the animation can take time  depending of your computer. If you want to interactively visualize the effect of parameters on the dynamics of the system covered in the video, you can launch it with
+Caution the animation can take time depending on your computer. If you want to interactively visualize the effect of parameters on the dynamics of the system covered in the video, you can launch it with
 ```
 python3 interactivePlotQ3.py
 ```
