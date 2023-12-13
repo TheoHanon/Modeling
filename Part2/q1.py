@@ -45,7 +45,6 @@ def plot_equilibria():
     plt.xlabel(r'$\overline{R}$[mm/day]')
     plt.ylabel(r'$\overline{T}$ [%]')
     plt.title(r"Graph of the equilibria $(\overline{T},\overline{R})$")
-    plt.savefig("plot/Q13.pdf")
     plt.show()
 
     return 
