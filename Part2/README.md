@@ -4,7 +4,7 @@ This project simulates tree cover across three different continents, aiming to m
 
 ## Description
 
-The simulation is split into several Python scripts that perform different functions within the project:
+The questions are split into several Python scripts that perform different functions within the project:
 - `q1.py`: Computes the equilibrium state of the tree cover model.
 - `q2.py`: Uses historical data to make tree cover predictions for the year 2100.
 - `q3.py`: Introduces additional state variables into the model and simulates their effects over time, including generating an animation.
